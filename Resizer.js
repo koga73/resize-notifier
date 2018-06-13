@@ -1,36 +1,20 @@
 /*
-* Resizer v1.0.1 Copyright (c) 2015 AJ Savino
-* 
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-* 
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
+* Resizer v1.0.2 Copyright (c) 2018 AJ Savino
+* https://github.com/koga73/Resizer
+* MIT License
 */
-var Resizer = function(params){
-    var _instance = null;
-	
-    var _vars = {
-        callbackDelay:300,      //Time in ms to wait before calling onResize
-        
-        _lastOrientation:window.orientation,
-        _timeout:null,
+function Resizer(params){
+	var _instance = null;
+
+	var _vars = {
+		callbackDelay:300,      //Time in ms to wait before calling onResize
+
+		_lastOrientation:window.orientation,
+		_timeout:0
 	};
-    
-    var _methods = {
-        init:function(){
+
+	var _methods = {
+		init:function(){
 			if (window.addEventListener){
 				window.addEventListener("resize", _methods._handler_resize, false);
 				window.addEventListener("orientationchange", _methods._handler_resize, false);
@@ -38,67 +22,66 @@ var Resizer = function(params){
 				window.attachEvent("onresize", _methods._handler_resize);
 				window.attachEvent("onorientationchange", _methods._handler_resize);
 			}
-        },
-        
-        destroy:function(){
-            var timeout = _vars._timeout;
+		},
+
+		destroy:function(){
+			var timeout = _vars._timeout;
 			if (timeout){
 				clearTimeout(timeout);
-				_vars._timeout = null;
+				_vars._timeout = 0;
 			}
-            _instance.onResize = null;
-            
-            if (window.removeEventListener){
+			_instance.onResize = null;
+
+			if (window.removeEventListener){
 				window.removeEventListener("resize", _methods._handler_resize);
 				window.removeEventListener("orientationchange", _methods._handler_resize);
 			} else if (window.detachEvent){
 				window.detachEvent("onresize", _methods._handler_resize);
 				window.detachEvent("onorientationchange", _methods._handler_resize);
 			}
-        },
-        
-        getWidth:function(){
-            return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        },
-        
-        getHeight:function(){
-            return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        },
-        
-        _handler_resize:function(){
-            if ("onorientationchange" in window){
-                var orientation = window.orientation;
-                if (orientation != _vars._lastOrientation){
-                    _vars._lastOrientation = orientation;
-                } else {
-                    return;
-                }
-            }
-			var timeout = _vars._timeout;
-			if (timeout){
-				clearTimeout(timeout);
-				_vars._timeout = null;
+		},
+
+		getWidth:function(){
+			return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		},
+
+		getHeight:function(){
+			return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		},
+
+		_handler_resize:function(){
+			if ("onorientationchange" in window){
+				var orientation = window.orientation;
+				if (orientation == _vars._lastOrientation){
+					return;
+				}
+				_vars._lastOrientation = orientation;
 			}
-			_vars._timeout = setTimeout(function(){
-				clearTimeout(timeout);
-				_vars._timeout = null;
-                _instance.onResize(_instance.getWidth(), _instance.getHeight());
-			}, _instance.callbackDelay);
+			if (_vars._timeout){
+				clearTimeout(_vars._timeout);
+			}
+			_vars._timeout = setTimeout(_methods._handler_timeout, _instance.callbackDelay);
+		},
+
+		_handler_timeout:function(){
+			clearTimeout(_vars._timeout);
+			_vars._timeout = 0;
+			_instance.onResize(_instance.getWidth(), _instance.getHeight());
 		}
-    };
-    
-    _instance = {
-        callbackDelay:_vars.callbackDelay,
-        
-        init:_methods.init,
-        destroy:_methods.destroy,
-        getWidth:_methods.getWidth,
-        getHeight:_methods.getHeight,
-        onResize:null
-    };
-    for (var param in params){
-        _instance[param] = params[param];
-    }
-    _instance.init();
-    return _instance;
+	};
+
+	_instance = {
+		callbackDelay:_vars.callbackDelay,
+
+		init:_methods.init,
+		destroy:_methods.destroy,
+		getWidth:_methods.getWidth,
+		getHeight:_methods.getHeight,
+		onResize:null
+	};
+	for (var param in params){
+		_instance[param] = params[param];
+	}
+	_instance.init();
+	return _instance;
 };

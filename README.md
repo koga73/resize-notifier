@@ -1,13 +1,12 @@
-##Resizer##
-*By: AJ Savino*
+Resizer | *By: AJ Savino*
 
-Provides a way to handle resize and orientation change events with a delay.
+Notifies on resize / orientation change events
 
-####Usage####
+Usage:
 ```JavaScript
-	var resizer = new Resizer({
-		onResize:function(width, height){
-			console.log("RESIZE", width, height);
-		}
-	});
+var resizer = new Resizer({
+	onResize:function(width, height){
+		console.log("RESIZE", width, height);
+	}
+});
 ```
