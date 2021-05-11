@@ -1,0 +1,27 @@
+{
+	"name": "resize-notifier",
+	"version": "2.0.0",
+	"description": "Notifies on resize / orientation change events",
+	"main": "resize-notifier.min.js",
+	"module": "resize-notifier.esm.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/koga73/resize-notifier.git"
+	},
+	"keywords": [
+		"on",
+		"resize",
+		"detect",
+		"notify",
+		"event"
+	],
+	"author": "AJ Savino",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/koga73/resize-notifier/issues"
+	},
+	"homepage": "https://github.com/koga73/resize-notifier#readme"
+}
