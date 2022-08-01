@@ -28,9 +28,10 @@ var resizeNotifier = new ResizeNotifier({
 
 ## API
 
--   constructor({callbackDelay, onResize, immediate})
+-   constructor({callbackDelay, onResize, onResizeBegin, immediate})
 -   init(immediate) | If immediate is true onResize will fire right away
 -   destroy()
 -   getWidth()
 -   getHeight()
--   onResize(width, height)
+-   onResizeBegin(width, height) | Will fire as soon as resize begins
+-   onResize(width, height) | Will fire after callbackDelay when window is done resizing

@@ -1,5 +1,5 @@
 /*
- * resize-notifier v2.0.0 Copyright (c) 2021 AJ Savino
+ * resize-notifier v2.1.0 Copyright (c) 2021 AJ Savino
  * https://github.com/koga73/resize-notifier
  * MIT License
  */
@@ -9,6 +9,7 @@ class ResizeNotifier {
 		this._handler_timeout = this._handler_timeout.bind(this);
 
 		this.callbackDelay = params.callbackDelay || 300;
+		this.onResizeBegin = params.onResizeBegin || null;
 		this.onResize = params.onResize || this._onResize;
 
 		this.init(params.immediate || false);
@@ -40,6 +41,7 @@ class ResizeNotifier {
 			this._timeout = 0;
 		}
 		this.onResize = this._onResize;
+		this.onResizeBegin = null;
 
 		if (window.removeEventListener) {
 			window.removeEventListener("resize", this._handler_resize);
@@ -68,6 +70,10 @@ class ResizeNotifier {
 		}
 		if (this._timeout) {
 			clearTimeout(this._timeout);
+		} else {
+			if (this.onResizeBegin) {
+				this.onResizeBegin(this.getWidth(), this.getHeight());
+			}
 		}
 		this._timeout = setTimeout(this._handler_timeout, this.callbackDelay);
 	}
