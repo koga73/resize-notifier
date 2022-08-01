@@ -1,6 +1,6 @@
 {
 	"name": "resize-notifier",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "Notifies on resize / orientation change events",
 	"main": "resize-notifier.min.js",
 	"module": "resize-notifier.esm.js",

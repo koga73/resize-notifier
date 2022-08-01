@@ -1,5 +1,5 @@
 /*
- * resize-notifier v2.0.0 Copyright (c) 2021 AJ Savino
+ * resize-notifier v2.1.0 Copyright (c) 2021 AJ Savino
  * https://github.com/koga73/resize-notifier
  * MIT License
  */
@@ -36,6 +36,7 @@ function ResizeNotifier(params) {
 				clearTimeout(timeout);
 				_vars._timeout = 0;
 			}
+			_instance.onResizeBegin = null;
 			_instance.onResize = null;
 
 			if (window.removeEventListener) {
@@ -65,6 +66,10 @@ function ResizeNotifier(params) {
 			}
 			if (_vars._timeout) {
 				clearTimeout(_vars._timeout);
+			} else {
+				if (_instance.onResizeBegin) {
+					_instance.onResizeBegin(_instance.getWidth(), _instance.getHeight());
+				}
 			}
 			_vars._timeout = setTimeout(_methods._handler_timeout, _instance.callbackDelay);
 		},
@@ -83,6 +88,8 @@ function ResizeNotifier(params) {
 		destroy: _methods.destroy,
 		getWidth: _methods.getWidth,
 		getHeight: _methods.getHeight,
+
+		onResizeBegin: null,
 		onResize: null
 	};
 	for (var param in params) {
